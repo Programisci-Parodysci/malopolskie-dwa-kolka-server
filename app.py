@@ -14,7 +14,7 @@ G = ox.graph_from_place(place_name, network_type="drive")
 
 # Getting the api call
 @app.route('/api', methods = ['GET'])
-async def call():
+async def call_route():
     start_latitude  = request.args.get('start_latitude', None)
     start_longitude = request.args.get('start_longitude', None)
     end_latitude  = request.args.get('end_latitude', None)
@@ -47,6 +47,18 @@ async def call():
     json_string = json.dumps(route)
     return json_string
 
+#call do zglaszania bledow z droga
+@app.route('/report', methods = ['GET'])
+async def call_report():
+    report_latitude  = request.args.get('report_latitude', None)
+    report_longitude = request.args.get('report_longitude', None)
+
+    if(not report_latitude or not report_longitude):
+        return 'WTF U DOIN'
+
+    u, v, key = ox.distance.nearest_edges(G, X=[point[1]], Y=[point[0]])
+    edge_data = G.get_edge_data(u, v, key)
+    print(edge_data)
 
 if __name__ == "__main__":
     #app.run(host='0.0.0.0' , port=5000)
