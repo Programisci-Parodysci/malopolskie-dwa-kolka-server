@@ -1,4 +1,5 @@
 # sqlalchemy database
+# DEPRACATED
 from importlib import metadata
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, ForeignKey, Boolean
 import os
