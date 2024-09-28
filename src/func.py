@@ -28,6 +28,7 @@ def get_suggestions(letters):
     print(content)
 
 def get_suggestions_photon(letters):
+    '''zalecam podanie nazwy województwa po przecinku tzn. Lesser Poland Voivodeship'''
     url='https://photon.komoot.io/api/?<params>'
     url=url.replace(f'<params>', f'q={letters}')
     print(url)
