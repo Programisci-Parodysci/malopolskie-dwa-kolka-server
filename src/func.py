@@ -20,11 +20,12 @@ def get_address(lat, lon, params):
 
 def get_suggestions(letters):
     url='https://nominatim.openstreetmap.org/search?<params>'
-    url=url.replace(f'<params>', f'q={letters}')
+    url=url.replace(f'<params>', f'q={letters}&layer=address')
     response=requests.get(url)
     content=response.content
     print(response)
     print(content)
+
 if __name__=='__main__':
     # lat=sys.argv[1]
     # lon=sys.argv[2]
