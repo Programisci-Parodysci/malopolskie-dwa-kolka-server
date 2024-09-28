@@ -50,13 +50,14 @@ def drop_sentence_by_index(index : int):
         connection.execute(table_traffic.delete().where(table_traffic.columns.index == index))
         connection.commit()
 
-def insert_csv(file_path):
-    with open(file_path) as file:
-        lines = file.readlines()
-        for line in lines:
-            index, ulica, data = line.split(',')
-            insert_traffic(index, ulica, data)
+# def insert_csv(file_path):
+#     with open(file_path) as file:
+#         lines = file.readlines()
+#         for line in lines:
+#             data= line.split(',')
+#             for info in  data:
+
 
 if __name__=='__main__':
     create_database()
-    insert_csv('/home/coolka/projects/python/dwa_kolka/malopolskie-dwa-kolka-server/data/Liczniki - dzienne.csv')
+    # insert_csv('/home/coolka/projects/python/dwa_kolka/malopolskie-dwa-kolka-server/data/Liczniki - dzienne.csv')
