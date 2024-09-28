@@ -21,6 +21,16 @@ def get_address(lat, lon, params):
 def get_suggestions(letters):
     url='https://nominatim.openstreetmap.org/search?<params>'
     url=url.replace(f'<params>', f'q={letters}&layer=address')
+    print(url)
+    response=requests.get(url)
+    content=response.content
+    print(response)
+    print(content)
+
+def get_suggestions_photon(letters):
+    url='https://photon.komoot.io/api/?<params>'
+    url=url.replace(f'<params>', f'q={letters}')
+    print(url)
     response=requests.get(url)
     content=response.content
     print(response)
@@ -34,4 +44,4 @@ if __name__=='__main__':
     #     params=sys.argv[3]
     #     print('params:', params)
     # get_address(lat, lon, params)
-    get_suggestions('Kra, małopolska')
+    get_suggestions_photon('Kra, Lesser Poland Voivodeship')
