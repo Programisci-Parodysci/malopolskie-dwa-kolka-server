@@ -5,8 +5,9 @@ from constants import db_path
 
 engine = create_engine('sqlite:///./data/traffic_pd.db')
 
-csv_file =  db_path
-df = pd.read_csv(csv_file, encoding='unicode_escape', on_bad_lines='skip')
+csv_file =  'data/Liczniki - dzienne.csv'
+df = pd.read_csv(csv_file, encoding='utf-8', on_bad_lines='skip')
+print(df)
 
 df.to_sql('traffic_pd', con=engine, if_exists='replace', index=False)
 
