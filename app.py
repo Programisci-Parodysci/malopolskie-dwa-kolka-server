@@ -56,7 +56,7 @@ async def call_report():
     if(not report_latitude or not report_longitude):
         return 'WTF U DOIN'
 
-    u, v, key = ox.distance.nearest_edges(G, X=[point[1]], Y=[point[0]])
+    u, v, key = ox.distance.nearest_edges(G, X=report_latitude, Y=report_longitude)
     edge_data = G.get_edge_data(u, v, key)
     print(edge_data)
 
