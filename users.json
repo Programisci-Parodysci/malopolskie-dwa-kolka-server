@@ -1,0 +1,8 @@
+{
+    "marekbetoniarek@kurczaczek.pl": {
+        "password": "$2b$12$eOS2iH1MEAI7JuJjx.N9COx8c5vbiH4hs/VwOifazgvrRFhVu/NCa",
+        "gpx_files": [
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n    <gpx version=\"1.1\" creator=\"GPSBabel - http://www.gpsbabel.org\">\n      <wpt lat=\"48.8566\" lon=\"2.3522\">\n        <name>Point 1</name>\n      </wpt>\n      <wpt lat=\"51.5074\" lon=\"-0.1278\">\n        <name>Point 2</name>\n      </wpt>\n    </gpx>"
+        ]
+    }
+}
