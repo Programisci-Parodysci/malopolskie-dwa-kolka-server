@@ -7,6 +7,8 @@ import asyncio
 
 
 # Define the place and create the graph
+app = Flask(__name__)
+
 place_name = "Kraków, Poland"
 G = ox.graph_from_place(place_name, network_type="drive")
 
