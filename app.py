@@ -23,6 +23,8 @@ CORS(app)
 
 USER_DATA_FILE = 'users.json'
 
+REPORTS_FILE = 'reports.json'
+
 #map of Cracov:
 
 place_name = "Kraków, Poland"
@@ -63,7 +65,51 @@ async def call_route():
     json_string = json.dumps(route)
     return json_string
 
+#------------------------------------------------------------
+
+#loading user data:
+def load_user_data():
+    if not os.path.exists(USER_DATA_FILE):
+        return {}
+
+    with open(USER_DATA_FILE, 'r') as file:
+        return json.load(file)
+
+#saving user data
+def save_user_data(data):
+    with open(USER_DATA_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+ #loading reports
+def load_reports():
+    if not os.path.exists(REPORTS_FILE):
+        return {}
+
+    with open(REPORTS_FILE, 'r') as file:
+        return json.load(file)
+
+#saving reports
+def save_reports(data):
+    with open(REPORTS_FILE, 'w') as file:
+        json.dump(data, file, indent=4)
+
+
+#---------------------
+
 #call to report something on the road
+def report_road(u, v, key):
+    edge_id = (u, v, key)
+    report_data = load_reports()
+    if edge_id in report_data:
+        report_data[edge_id] += 1
+    else:
+        report_data[edge_id] = 1
+    save_reports(report_data)
+
+
+
+
+
 @app.route('/report', methods = ['GET'])
 async def call_report():
     report_latitude  = request.args.get('report_latitude', None)
@@ -82,20 +128,8 @@ async def call_report():
 
     return 'Report saved!'
 
-#------------------------------------------------------------
 
-#loading user data:
-def load_user_data():
-    if not os.path.exists(USER_DATA_FILE):
-        return {}
-
-    with open(USER_DATA_FILE, 'r') as file:
-        return json.load(file)
-
-#saving user data
-def save_user_data(data):
-    with open(USER_DATA_FILE, 'w') as file:
-        json.dump(data, file, indent=4)
+#-------------------
 
 #register user
 @app.route('/register', methods=['POST'])
@@ -190,4 +224,7 @@ if __name__ == "__main__":
     #app.run(host='0.0.0.0' , port=5000)
     if not os.path.exists(USER_DATA_FILE):
         save_user_data({})
+    if not os.path.exists(REPORTS_FILE):
+        save_reports({})
+
     app.run(host='0.0.0.0' , port=40088)
