@@ -29,7 +29,22 @@ REPORTS_FILE = 'reports.json'
 #map of Cracov:
 
 place_name = "Kraków, Poland"
-G = ox.graph_from_place(place_name, network_type="drive")
+G_bike = ox.graph_from_place(place_name, network_type="bike")
+G_all = ox.graph_from_place(place_name, network_type="all")
+
+G_all = ox.add_edge_speeds(G_all)
+#get ids of nodes with bike roads between them:
+
+bike_coords = []
+
+for u, v, key, data in G_bike.edges(keys=True, data=True):
+    node1 = G_bike.nodes[u]
+    node2 = G_bike.nodes[v]
+
+    bike_coords.append((u, v))
+
+
+
 
 # Getting the api call for findinf a route from A to B
 @app.route('/api', methods = ['GET'])
@@ -49,19 +64,55 @@ async def call_route():
     end_longitude = float(end_longitude)
 
     # Find the nearest nodes to the coordinates
-    start_node = ox.distance.nearest_nodes(G, start_latitude, start_longitude)
-    end_node = ox.distance.nearest_nodes(G, end_latitude, end_longitude)
+    start_node = ox.distance.nearest_nodes(G_bike, start_latitude, start_longitude)
+    end_node = ox.distance.nearest_nodes(G_bike, end_latitude, end_longitude)
 
     # Find the shortest path using A* algorithm
-    route_nodes = ox.shortest_path(G, start_node, end_node, weight="travel_time")
+    route_nodes = ox.shortest_path(G_bike, start_node, end_node, weight="travel_time")
 
     #route should be the 'shortest' path.
     route = []
 
     for node_id in route_nodes:
         node = {}
-        node['latitude'] = G.nodes[node_id]['x']
-        node['longitude'] = G.nodes[node_id]['y']
+        node['latitude'] = G_bike.nodes[node_id]['x']
+        node['longitude'] = G_bike.nodes[node_id]['y']
+        route.append(node)
+    json_string = json.dumps(route)
+    return json_string
+
+
+# safe route from A to B
+@app.route('/safe_route', methods = ['GET'])
+async def call_route():
+    start_latitude  = request.args.get('start_latitude', None)
+    start_longitude = request.args.get('start_longitude', None)
+    end_latitude  = request.args.get('end_latitude', None)
+    end_longitude = request.args.get('end_longitude', None)
+
+
+    if(not start_latitude or not start_longitude or not end_latitude or not end_longitude):
+        return 'WTF U DOIN'
+
+    start_latitude = float(start_latitude)
+    start_longitude = float(start_longitude)
+    end_latitude = float(end_latitude)
+    end_longitude = float(end_longitude)
+
+    # Find the nearest nodes to the coordinates
+    start_node = ox.distance.nearest_nodes(G_all, start_latitude, start_longitude)
+    end_node = ox.distance.nearest_nodes(G_all, end_latitude, end_longitude)
+
+    # Find the shortest path using A* algorithm
+    route_nodes = ox.shortest_path(G_all, start_node, end_node, weight="danger_score")
+
+    #route should be the 'shortest' path.
+    route = []
+
+    for node_id in route_nodes:
+        node = {}
+        node['latitude'] = G_bike.nodes[node_id]['x']
+        node['longitude'] = G_bike.nodes[node_id]['y']
         route.append(node)
     json_string = json.dumps(route)
     return json_string
@@ -120,7 +171,7 @@ async def call_report():
     report_latitude = float(report_latitude)
     report_longitude = float(report_longitude)
 
-    u, v, key = ox.distance.nearest_edges(G, report_latitude, report_longitude)
+    u, v, key = ox.distance.nearest_edges(G_bike, report_latitude, report_longitude)
     # edge_data = G.get_edge_data(u, v, key)
     report_road(u, v, key)
 
@@ -238,11 +289,53 @@ def get_gpx(current_user):
     return jsonify({'gpx_files': gpx_files}), 200
 
 
+def calculate_danger():
+
+    for u, v, data in G_all.edges(data=True):
+        street_count_u = G_all.nodes[u]['street_count']
+        street_count_v = G_all.nodes[v]['street_count']
+
+
+        data['avg_intersection_num'] = (street_count_u + street_count_v) / 2
+
+        avg_intersection_num = data['avg_intersection_num']
+
+        if avg_intersection_num >= 3.5:
+            data['intersection_score'] = 0.5
+        elif avg_intersection_num < 3.5:
+            data['intersection_score'] = 0.5
+
+        # Speed score [0, 1]
+        speed = data['speed_kph']
+        if 80 < speed:
+            data['speed_score'] = 1
+        elif 50 < speed <= 80:
+            data['speed_score'] = 0.75
+        elif 35 < speed <= 50:
+            data['speed_score'] = 0.5
+        elif 25 <= speed <= 35:
+            data['speed_score'] = 0.25
+        elif speed < 25:
+            data['speed_score'] = 0
+
+        if (u, v) in bike_coords:
+            data['bike_score'] = 0
+        else:
+            data['bike_score'] = 1
+
+
+    # Create danger score (intersections score not used for now)
+    data['danger_score'] = data['speed_score'] + data['bike_score']
+
+
+
+
 if __name__ == "__main__":
     #app.run(host='0.0.0.0' , port=5000)
     if not os.path.exists(USER_DATA_FILE):
         save_user_data({})
     if not os.path.exists(REPORTS_FILE):
         save_reports({})
+    calculate_danger()
 
     app.run(host='0.0.0.0' , port=40088)
