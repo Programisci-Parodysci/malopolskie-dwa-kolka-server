@@ -42,7 +42,7 @@ def get_suggestions_photon(letters):
     # logger.debug(f'url: {url}')
     try:
         response=requests.get(url)
-        content=response.content
+        content=response.json()
     except Exception as e:
         # logger.error(e)
         return ""
@@ -59,5 +59,19 @@ def get_coordinates_from_address(address):
         return ""
     return (f'{location.latitude}, {location.longitude}')
 
+def get_readable_adresses(num_of_adresses, content):
+    '''zwraca listę adresów w formacie: ulica, miasto, województwo'''
+    addresses=[]
+    for feature in content["features"][:num_of_adresses]:
+        street=feature["properties"].get("street", "")
+        city=feature["properties"].get("city", "")
+        state=feature["properties"].get("state", "")
+        name=feature["properties"].get("name", "")
+        address = ', '.join([part for part in [street, city, state, name] if part])
+        addresses.append(address)
+    return addresses
+
 if __name__=='__main__':
-    print(get_suggestions_photon('Krak, Lesser Poland Voivodeship'))
+    json_content=get_suggestions_photon('Kra, Lesser Poland Voivodeship')
+    print(json_content)
+    print(get_readable_adresses(5, json_content))
