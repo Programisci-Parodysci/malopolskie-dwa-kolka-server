@@ -121,10 +121,9 @@ async def call_report():
     report_latitude = float(report_latitude)
     report_longitude = float(report_longitude)
 
-    edge_data = ox.distance.nearest_edges(G, report_latitude, report_longitude)
+    u, v, key = ox.distance.nearest_edges(G, report_latitude, report_longitude)
     # edge_data = G.get_edge_data(u, v, key)
-    print(edge_data)
-
+    report_road(u, v, key)
 
     return 'Report saved!'
 
