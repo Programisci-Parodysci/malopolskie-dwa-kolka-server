@@ -86,7 +86,8 @@ def load_reports():
         return {}
 
     with open(REPORTS_FILE, 'r') as file:
-        return json.load(json.dumps(file))
+        print(file)
+        return json.load(file)
 
 #saving reports
 def save_reports(data):
