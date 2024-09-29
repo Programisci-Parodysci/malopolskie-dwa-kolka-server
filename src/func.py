@@ -14,19 +14,25 @@ def get_address(lat, lon, params):
     url=url.replace(f'lat=<value>', f'lat={lat}')
     url=url.replace(f'lon=<value>', f'lon={lon}')
     url=url.replace(f'&<params>', f'')
-    response=requests.get(url)
-    content=response.content
-    print(content)
+    try:
+        response=requests.get(url)
+        content=response.content
+    except Exception as e:
+        logger.error(e)
+        return ""
+    return content
 
 
 def get_suggestions(letters):
     url='https://nominatim.openstreetmap.org/search?<params>'
     url=url.replace(f'<params>', f'q={letters}&layer=address')
-    print(url)
-    response=requests.get(url)
-    content=response.content
-    print(response)
-    print(content)
+    try:
+        response=requests.get(url)
+        content=response.content
+    except Exception as e:
+        logger.error(e)
+        return ""
+    return content
 
 def get_suggestions_photon(letters):
     '''zalecam podanie nazwy województwa po przecinku tzn. Lesser Poland Voivodeship'''
@@ -34,15 +40,23 @@ def get_suggestions_photon(letters):
     url='https://photon.komoot.io/api/?<params>'
     url=url.replace(f'<params>', f'q={letters}')
     logger.debug(f'url: {url}')
-    response=requests.get(url)
-    content=response.content
+    try:
+        response=requests.get(url)
+        content=response.content
+    except Exception as e:
+        logger.error(e)
+        return ""
     return content
 
 def get_coordinates_from_address(address):
     '''zwraca krotkę (lat, lon)'''
     logger.info(f'address: {address}')
-    location = app.geocode(address)
-    logger.debug(f'location: {location}')
+    try:
+        location = app.geocode(address)
+        logger.debug(f'location: {location}')
+    except Exception as e:
+        logger.error(e)
+        return "", ""
     return location.latitude, location.longitude
 
 if __name__=='__main__':
