@@ -133,7 +133,7 @@ async def call_sugg():
     if(not letters):
         return 'WTF U DOIN'
 
-    content = get_suggestions_photon(letters)
+    content = get_suggestions_photon(letters+', Lesser Poland Voivodeship')
     return content
 
 @app.route('/get_coords', methods = ['GET'])
