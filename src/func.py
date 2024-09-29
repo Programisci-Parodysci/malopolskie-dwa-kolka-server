@@ -34,12 +34,11 @@ def get_suggestions_photon(letters):
     print(url)
     response=requests.get(url)
     content=response.content
-    print(response)
-    print(content)
+    return content
 
 def get_coordinates(address):
     location = app.geocode(address)
-    print(location.latitude, location.longitude)
+    return location.latitude, location.longitude
 
 if __name__=='__main__':
     # lat=sys.argv[1]
