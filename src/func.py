@@ -56,8 +56,8 @@ def get_coordinates_from_address(address):
         # logger.debug(f'location: {location}')
     except Exception as e:
         # logger.error(e)
-        return "", ""
-    return location.latitude, location.longitude
+        return ""
+    return (f'{location.latitude}, {location.longitude}')
 
 if __name__=='__main__':
     print(get_suggestions_photon('Krak, Lesser Poland Voivodeship'))
