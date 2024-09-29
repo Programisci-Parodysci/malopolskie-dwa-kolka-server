@@ -11,7 +11,7 @@ from functools import wraps
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 import os
-from src.func import get_suggestions_photon, get_coordinates_from_address
+from src.func import get_suggestions_photon, get_coordinates_from_address, get_readable_adresses
 
 
 # Define the place and create the graph
@@ -184,7 +184,7 @@ async def call_sugg():
     if(not letters):
         return 'WTF U DOIN'
 
-    content = get_suggestions_photon(letters+', Lesser Poland Voivodeship')
+    content = get_readable_adresses(5,get_suggestions_photon(letters+', Lesser Poland Voivodeship'))
     return content
 
 @app.route('/get_coords', methods = ['GET'])

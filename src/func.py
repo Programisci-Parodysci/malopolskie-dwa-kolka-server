@@ -5,7 +5,7 @@ import sys
 import asyncio
 from geopy.geocoders import Nominatim
 import json
-from log import logger
+# from logs import logger
 
 app = Nominatim(user_agent="malopolskie_dwa_kola")
 
@@ -18,7 +18,7 @@ def get_address(lat, lon, params):
         response=requests.get(url)
         content=response.content
     except Exception as e:
-        logger.error(e)
+        # logger.error(e)
         return ""
     return content
 
@@ -30,41 +30,48 @@ def get_suggestions(letters):
         response=requests.get(url)
         content=response.content
     except Exception as e:
-        logger.error(e)
+        # logger.error(e)
         return ""
     return content
 
 def get_suggestions_photon(letters):
     '''zalecam podanie nazwy województwa po przecinku tzn. Lesser Poland Voivodeship'''
-    logger.info(f'letters: {letters}')
+    # logger.info(f'letters: {letters}')
     url='https://photon.komoot.io/api/?<params>'
     url=url.replace(f'<params>', f'q={letters}')
-    logger.debug(f'url: {url}')
+    # logger.debug(f'url: {url}')
     try:
         response=requests.get(url)
-        content=response.content
+        content=response.json()
     except Exception as e:
-        logger.error(e)
+        # logger.error(e)
         return ""
     return content
 
 def get_coordinates_from_address(address):
     '''zwraca krotkę (lat, lon)'''
-    logger.info(f'address: {address}')
+    # logger.info(f'address: {address}')
     try:
         location = app.geocode(address)
-        logger.debug(f'location: {location}')
+        # logger.debug(f'location: {location}')
     except Exception as e:
-        logger.error(e)
-        return "", ""
-    return location.latitude, location.longitude
+        # logger.error(e)
+        return ""
+    return (f'{location.latitude},{location.longitude}')
+
+def get_readable_adresses(num_of_adresses, content):
+    '''zwraca listę adresów w formacie: ulica, miasto, województwo'''
+    addresses=[]
+    for feature in content["features"][:num_of_adresses]:
+        street=feature["properties"].get("street", "")
+        city=feature["properties"].get("city", "")
+        state=feature["properties"].get("state", "")
+        name=feature["properties"].get("name", "")
+        address = ', '.join([part for part in [street, city, state, name] if part])
+        addresses.append(address)
+    return addresses
 
 if __name__=='__main__':
-    # lat=sys.argv[1]
-    # lon=sys.argv[2]
-    # params=""
-    # if len(sys.argv)>3:
-    #     params=sys.argv[3]
-    #     print('params:', params)
-    # get_address(lat, lon, params)
-    get_coordinates_from_address('Kraków, Lesser Poland Voivodeship')
+    json_content=get_suggestions_photon('Kra, Lesser Poland Voivodeship')
+    print(json_content)
+    print(get_readable_adresses(5, json_content))
