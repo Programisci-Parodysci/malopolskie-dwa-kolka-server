@@ -11,7 +11,7 @@ from functools import wraps
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 import os
-from src.func import get_suggestions_photon, get_coordinates_from_address, get_readable_adresses
+from src.func import get_suggestions_photon, get_coordinates_from_address
 
 
 # Define the place and create the graph
@@ -84,7 +84,7 @@ async def call_route():
 
 # safe route from A to B
 @app.route('/safe_route', methods = ['GET'])
-async def call_route():
+async def call_route_safe():
     start_latitude  = request.args.get('start_latitude', None)
     start_longitude = request.args.get('start_longitude', None)
     end_latitude  = request.args.get('end_latitude', None)
@@ -184,7 +184,7 @@ async def call_sugg():
     if(not letters):
         return 'WTF U DOIN'
 
-    content = get_readable_adresses(5,get_suggestions_photon(letters+', Lesser Poland Voivodeship'))
+    content = get_suggestions_photon(letters+', Lesser Poland Voivodeship')
     return content
 
 @app.route('/get_coords', methods = ['GET'])
