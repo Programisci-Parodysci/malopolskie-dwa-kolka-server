@@ -37,6 +37,10 @@ def get_suggestions_photon(letters):
     print(response)
     print(content)
 
+def get_coordinates(address):
+    location = app.geocode(address)
+    print(location.latitude, location.longitude)
+
 if __name__=='__main__':
     # lat=sys.argv[1]
     # lon=sys.argv[2]
@@ -45,4 +49,4 @@ if __name__=='__main__':
     #     params=sys.argv[3]
     #     print('params:', params)
     # get_address(lat, lon, params)
-    get_suggestions_photon('Kra, Lesser Poland Voivodeship')
+    get_coordinates('Kraków, Lesser Poland Voivodeship')
