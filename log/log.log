@@ -1,0 +1,5 @@
+2024-09-29 08:59:33,721 - log - INFO - address: Kraków, Lesser Poland Voivodeship
+2024-09-29 08:59:35,352 - log - DEBUG - location: Kraków, województwo małopolskie, Polska
+2024-09-29 09:01:24,629 - log - INFO - address: Kraków, Lesser Poland Voivodeship
+2024-09-29 09:01:27,358 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7a09c7de5190>: Failed to establish a new connection: [Errno 101] Network is unreachable')': /search?q=Krak%C3%B3w%2C+Lesser+Poland+Voivodeship&format=json&limit=1
+2024-09-29 09:01:30,429 - log - DEBUG - location: Kraków, województwo małopolskie, Polska

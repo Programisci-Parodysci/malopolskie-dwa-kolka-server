@@ -5,6 +5,7 @@ import sys
 import asyncio
 from geopy.geocoders import Nominatim
 import json
+from log import logger
 
 app = Nominatim(user_agent="malopolskie_dwa_kola")
 
@@ -29,16 +30,19 @@ def get_suggestions(letters):
 
 def get_suggestions_photon(letters):
     '''zalecam podanie nazwy województwa po przecinku tzn. Lesser Poland Voivodeship'''
+    logger.info(f'letters: {letters}')
     url='https://photon.komoot.io/api/?<params>'
     url=url.replace(f'<params>', f'q={letters}')
-    print(url)
+    logger.debug(f'url: {url}')
     response=requests.get(url)
     content=response.content
     return content
 
 def get_coordinates_from_address(address):
     '''zwraca krotkę (lat, lon)'''
+    logger.info(f'address: {address}')
     location = app.geocode(address)
+    logger.debug(f'location: {location}')
     return location.latitude, location.longitude
 
 if __name__=='__main__':
