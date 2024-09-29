@@ -9,7 +9,7 @@ import os
 import re
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'supersekretnyklucz'  # Klucz JWT
+app.config['SECRET_KEY'] = 'BajoJajo'
 bcrypt = Bcrypt(app)
 CORS(app)
 
@@ -26,7 +26,7 @@ def extract_gpx_name(gpx_content):
     if start_index == -1 or end_index == -1:
         return None
 
-    return gpx_content[start_index:end_index].strip()
+    return gpx_content[start_index:end_index].strip()f
 
 def load_user_data():
     if not os.path.exists(USER_DATA_FILE):
