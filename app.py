@@ -98,7 +98,7 @@ def save_reports(data):
 
 #call to report something on the road
 def report_road(u, v, key):
-    edge_id = (u, v, key)
+    edge_id = f"{u},{v},{key}"
     report_data = load_reports()
     if edge_id in report_data:
         report_data[edge_id] += 1
