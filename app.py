@@ -86,7 +86,7 @@ def load_reports():
         return {}
 
     with open(REPORTS_FILE, 'r') as file:
-        return json.load(file)
+        return json.load(json.dumps(file))
 
 #saving reports
 def save_reports(data):
@@ -105,9 +105,6 @@ def report_road(u, v, key):
     else:
         report_data[edge_id] = 1
     save_reports(report_data)
-
-
-
 
 
 @app.route('/report', methods = ['GET'])
