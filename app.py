@@ -11,6 +11,7 @@ from functools import wraps
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 import os
+from src.func import get_suggestions_photon, get_coordinates_from_address
 
 
 # Define the place and create the graph
@@ -124,6 +125,26 @@ async def call_report():
     report_road(u, v, key)
 
     return 'Report saved!'
+
+@app.route('/get_sugg', methods = ['GET'])
+async def call_sugg():
+    letters = request.args.get('letters', None)
+
+    if(not letters):
+        return 'WTF U DOIN'
+
+    content = get_suggestions_photon(letters)
+    return content
+
+@app.route('/get_coords', methods = ['GET'])
+async def call_coords():
+    address = request.args.get('address', None)
+
+    if(not address):
+        return 'WTF U DOIN'
+
+    coords = get_coordinates_from_address(address)
+    return coords
 
 
 #-------------------

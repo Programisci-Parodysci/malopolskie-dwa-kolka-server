@@ -36,7 +36,8 @@ def get_suggestions_photon(letters):
     content=response.content
     return content
 
-def get_coordinates(address):
+def get_coordinates_from_address(address):
+    '''zwraca krotkę (lat, lon)'''
     location = app.geocode(address)
     return location.latitude, location.longitude
 
@@ -48,4 +49,4 @@ if __name__=='__main__':
     #     params=sys.argv[3]
     #     print('params:', params)
     # get_address(lat, lon, params)
-    get_coordinates('Kraków, Lesser Poland Voivodeship')
+    get_coordinates_from_address('Kraków, Lesser Poland Voivodeship')
