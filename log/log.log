@@ -5,3 +5,9 @@
 2024-09-29 09:01:30,429 - log - DEBUG - location: Kraków, województwo małopolskie, Polska
 2024-09-29 09:13:31,153 - log - INFO - address: Kraków, Lesser Poland Voivodeship
 2024-09-29 09:13:32,679 - log - DEBUG - location: Kraków, województwo małopolskie, Polska
+2024-09-29 09:38:34,757 - log - INFO - letters: Kraków, Lesser Poland Voivodeship
+2024-09-29 09:38:34,757 - log - DEBUG - url: https://photon.komoot.io/api/?q=Kraków, Lesser Poland Voivodeship
+2024-09-29 09:38:59,501 - log - INFO - letters: Krak, Lesser Poland Voivodeship
+2024-09-29 09:38:59,501 - log - DEBUG - url: https://photon.komoot.io/api/?q=Krak, Lesser Poland Voivodeship
+2024-09-29 09:46:13,063 - my_log - INFO - letters: Krak, Lesser Poland Voivodeship
+2024-09-29 09:46:13,063 - my_log - DEBUG - url: https://photon.komoot.io/api/?q=Krak, Lesser Poland Voivodeship
