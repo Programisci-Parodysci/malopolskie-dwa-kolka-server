@@ -6,6 +6,7 @@ from functools import wraps
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 import os
+import re
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersekretnyklucz'  # Klucz JWT
@@ -14,6 +15,18 @@ CORS(app)
 
 USER_DATA_FILE = 'users.json'
 
+
+def extract_gpx_name(gpx_content):
+    start_tag = '<name>'
+    end_tag = '</name>'
+
+    start_index = gpx_content.find(start_tag) + len(start_tag)
+    end_index = gpx_content.find(end_tag)
+
+    if start_index == -1 or end_index == -1:
+        return None
+
+    return gpx_content[start_index:end_index].strip()
 
 def load_user_data():
     if not os.path.exists(USER_DATA_FILE):
@@ -105,6 +118,22 @@ def add_gpx(current_user):
     save_user_data(user_data)
 
     return jsonify({'message': 'Plik GPX został dodany!'}), 200
+
+
+@app.route('/get_gpx_by_name/<gpx_name>', methods=['GET'])
+@token_required
+def get_gpx_by_name(current_user, gpx_name):
+    user_data = load_user_data()
+    gpx_files = user_data[current_user]['gpx_files']
+
+    for gpx in gpx_files:
+        if extract_gpx_name(gpx) == gpx_name:
+            return jsonify({'gpx_file': gpx}), 200
+
+    return jsonify({'message': 'Plik GPX nie został znaleziony!'}), 404
+
+
+
 
 
 @app.route('/get_gpx', methods=['GET'])
