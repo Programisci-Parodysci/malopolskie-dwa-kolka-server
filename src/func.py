@@ -57,7 +57,7 @@ def get_coordinates_from_address(address):
     except Exception as e:
         # logger.error(e)
         return ""
-    return (f'{location.latitude},{location.longitude}')
+    return (f'{location.latitude}, {location.longitude}')
 
 def get_readable_adresses(num_of_adresses, content):
     '''zwraca listę adresów w formacie: ulica, miasto, województwo'''
